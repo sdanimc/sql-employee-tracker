@@ -19,8 +19,8 @@ const rolePrompts = [
         name: 'department',
         message: 'What department is this role under?',
         type: 'list',
-        //choices: somehow call department names from db here?
-    },
+        choices: departOpts
+    }
 ]
 const employeePrompts = [
     {
@@ -37,8 +37,9 @@ const employeePrompts = [
         name: 'role',
         message: 'What role does this employee hold?',
         type: 'list',
-        //choices: call role table from db here
-    },
+        //get rolesOpts in addEmployee funct
+        choices: rolesOpts
+    }
 ]
 function addDepartment() {
     return inquirer.prompt([{
@@ -51,12 +52,14 @@ function addDepartment() {
     //run init
 };
 function addEmployee() {
+    //get roles function then ([rows]) let roles = rows const rolesOpts = rows.map
     return inquirer.prompt(employeePrompts)
     //post to add input to db
     //console.log success
     //run init
 };
 function addRole() {
+     //get depart function then ([rows]) let departs = rows const departOpts = rows.map
     return inquirer.prompt(rolePrompts)
     //post to add input to db
     //console.log success
@@ -87,6 +90,7 @@ function init() {
         message: "Welcome to the Company database. What would you like to do?",
         type: 'list',
         choices: ['View all departments', 'View all roles', 'View all employees', 'Add Department', 'Add Role', 'Add Employee', 'Update Employee Role']
+        //choices: [ 'Add Department', 'Add Role', 'Add Employee']
     }])
         .then((data) => {
             let userChoice = data.open;
