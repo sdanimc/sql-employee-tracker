@@ -1,11 +1,8 @@
-const express = require('express');
-const mysql = require('mysql2');
 const inquirer = require('inquirer');
+const db = require('./db');
 
-const app = express();
+init();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 const rolePrompts = [
     {
         name: 'role',
