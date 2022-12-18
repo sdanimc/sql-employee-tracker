@@ -3,6 +3,7 @@ const db = require('./db');
 
 init();
 
+//post request related code
 const rolePrompts = [
     {
         name: 'role',
@@ -41,10 +42,44 @@ const employeePrompts = [
 ]
 function addDepartment() {
     return inquirer.prompt([{
-        name: 'department',
+        name: 'departmentAdd',
         message: 'What department would you like to add?',
         type: 'input'
     }])
+    //post to add input to db
+    //console.log success
+    //run init
+};
+function addEmployee() {
+    return inquirer.prompt(employeePrompts)
+    //post to add input to db
+    //console.log success
+    //run init
+};
+function addRole() {
+    return inquirer.prompt(rolePrompts)
+    //post to add input to db
+    //console.log success
+    //run init
+};
+//get request related code
+function getDepartments() {
+    //return departmets get request
+    //then run init
+};
+function getRoles() {
+    //return roles get request
+    //then run init
+};
+function getEmployees() {
+    //return employee get request
+    //then run init
+};
+//put/update related code
+function updateRole() {
+    //get and post?
+    //console.log success
+    //run init
 };
 function init() {
     return inquirer.prompt([{
@@ -64,5 +99,3 @@ function init() {
             else if (userChoice == 'Update Employee Role') { updateRole(); }
         })
 }
-
-app.listen(3001);
