@@ -89,18 +89,16 @@ function init() {
         message: 'Welcome to the Company database. What would you like to do?',
         type: 'list',
         choices: ['View all departments', 'View all roles', 'View all employees', 'Add Department', 'Add Role', 'Add Employee', 'Update Employee Role']
-        //choices: [ 'Add Department', 'Add Role', 'Add Employee']
     }])
         .then((data) => {
             let userChoice = data.open;
-            if(userChoice == 'Add Employee') { addEmployee();} else { console.log('test complete')}
-            /*if (userChoice == 'View all departments') { getDepartments(); }
+            if (userChoice == 'View all departments') { getDepartments(); }
             else if (userChoice == 'View all roles') { getRoles(); }
             else if (userChoice == 'View all employees') { getEmployees(); }
             else if (userChoice == 'Add Department') { addDepartment(); }
             else if (userChoice == 'Add Role') { addRole(); }
             else if (userChoice == 'Add Employee') { addEmployee(); }
-            else if (userChoice == 'Update Employee Role') { updateRole(); }*/
+            else if (userChoice == 'Update Employee Role') { updateRole(); }
         })
 }
 init();
