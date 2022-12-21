@@ -5,7 +5,7 @@ class Database {
     }
     getAllEmployees(){
         return this.db.promise().query(
-            'SELECT employees.id, employees.first, employees.last, roles.title, departments.name, roles.salary, CONCAT(manager.first, " ", manager.last) AS manager FROM employees LEFT JOIN roles ON employees.role_id = roles.id LEFT JOIN departments ON roles.department_id = departments.id LEFT JOIN employees manager ON manager.id = employees.manager_id;'
+            'SELECT employees.id, employees.first, employees.last, roles.title, departments.name AS department, roles.salary, CONCAT(manager.first, " ", manager.last) AS manager FROM employees LEFT JOIN roles ON employees.role_id = roles.id LEFT JOIN departments ON roles.department_id = departments.id LEFT JOIN employees manager ON manager.id = employees.manager_id;'
         )
     }
     getAllDepartments(){
@@ -31,6 +31,11 @@ class Database {
     addNewRole(newRole){
         return this.db.promise().query(
             'INSERT INTO roles SET ?', newRole
+        )
+    }
+    updateEmployee(employeeID, newRole){
+        return this.db.promise().query(
+            'UPDATE employees SET role_id = ? WHERE id = ?', [newRole, employeeID]
         )
     }
 }

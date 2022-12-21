@@ -2,7 +2,7 @@
 const { prompt } = require('inquirer');
 const db = require('./db');
 
-//post request related code
+//add data to table code
 function addDepartment() {
     prompt([{
         name: 'name',
@@ -106,7 +106,7 @@ function addRole() {
     })
    
 };
-//get request related code
+//view table code
 function getDepartments() {
     db.getAllDepartments()
     .then(([rows]) => {
@@ -134,11 +134,44 @@ function getEmployees() {
     })
     .then(() => init());
 };
-//put/update related code
+//update data code
 function updateRole() {
-    //get and post?
-    //console.log success
-    //run init
+    db.getAllEmployees()
+    .then(([rows]) => {
+        let employees = rows;
+        const employOpts = employees.map(({id, first, last}) => ({
+            name:`${first} ${last}`,
+            value: id
+        }));
+        prompt([{
+            name: 'employeeId',
+            message: 'Which employee are you updating?',
+            type: 'list',
+            choices: employOpts
+        }])
+        .then(res => {
+            let employeeID = res.employeeId;
+            db.getAllRoles()
+            .then(([rows])=> {
+                let roles2 = rows;
+                const roleOpts2 = roles2.map(({id, title}) => ({
+                    name: title,
+                    value: id
+                }));
+                prompt([
+                    {
+                        name: 'newRole',
+                        message: 'What is their new role?',
+                        type: 'list',
+                        choices: roleOpts2
+                    }
+                ])
+            .then (res => db.updateEmployee(employeeID, res.newRole))
+            .then(()=> console.log('Updated Employee Role'))
+            .then(() => init());
+            })
+        })
+    })
 };
 function init() {
     prompt([{
