@@ -1,5 +1,5 @@
 const inquirer = require('inquirer');
-//const db = require('./db');
+const db = require('./db');
 
 //post request related code
 const rolePrompts = [
@@ -66,7 +66,7 @@ function addRole() {
 };
 //get request related code
 function getDepartments() {
-    //return departmets get request
+    db.getDepartments
     //then run init
 };
 function getRoles() {
