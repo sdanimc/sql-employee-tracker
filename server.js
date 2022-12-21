@@ -1,27 +1,30 @@
-const inquirer = require('inquirer');
+//const inquirer = require('inquirer');
+const { prompt } = require('inquirer');
 const db = require('./db');
 
 //post request related code
-const rolePrompts = [
-    {
-        name: 'role',
-        message: 'What is the title of the role you are adding?',
+function addDepartment() {
+    prompt([{
+        name: 'name',
+        message: 'What department would you like to add?',
         type: 'input'
-    },
-    {
-        name: 'salary',
-        message: 'What is the salary for the role you are adding?',
-        type: 'input'
-    },
-    /*{
-        name: 'department',
-        message: 'What department is this role under?',
-        type: 'list',
-        choices: departOpts
-    }*/
-]
-const employeePrompts = [
-    {
+    }])
+    .then(res => {
+        let name = res;
+        db.addNewDepartment(name)
+        .then(() => console.log('Added new department'))
+        .then(()=> init())
+    })
+};
+function addEmployee() {
+    db.getAllRoles()
+    .then(([rows]) => {
+       let roles = rows;
+       const roleOpts = roles.map(({id, title}) => ({
+           name: title,
+           value: id,
+       }))
+       prompt([    {
         name: 'first',
         message: 'First Name:',
         type: 'input'
@@ -31,51 +34,105 @@ const employeePrompts = [
         message: 'Last Name:',
         type: 'input'
     },
-    /*{
+    {
         name: 'role',
         message: 'What role does this employee hold?',
         type: 'list',
-        //get rolesOpts in addEmployee funct
-        choices: rolesOpts
-    }*/
-]
-function addDepartment() {
-    return inquirer.prompt([{
-        name: 'departmentAdd',
-        message: 'What department would you like to add?',
-        type: 'input'
+        choices: roleOpts
     }])
-    //post to add input to db
-    //console.log success
-    //run init
-};
-function addEmployee() {
-    //get roles function then ([rows]) let roles = rows const rolesOpts = rows.map
-    inquirer.prompt(employeePrompts)
-    .then((answers) => {console.log(answers)})
-    //post to add input to db
-    //console.log success
-    //run init
+       .then((res) => {
+        let firstName = res.first
+        let lastName = res.last
+        let roleId = res.role
+        db.getAllEmployees()
+        .then(([rows]) => {
+            let employees = rows;
+            const mgtOpts = employees.map(({id, first, last})=>
+            ({
+                name: `${first} ${last}`,
+                value: id
+            }));
+            mgtOpts.unshift({name: 'None', value: null});
+            prompt({  name: 'manager',
+            message: 'What does this employee report to?',
+            type: 'list',
+            choices: mgtOpts})
+            .then(res => {
+                let employee = {
+                    manager_id: res.manager,
+                    role_id: roleId,
+                    first: firstName,
+                    last: lastName
+                }
+                db.addNewEmployee(employee)
+            })
+            .then(() => console.log('Added new employee'))
+            .then(() => init())
+        })
+       })
+   })
+  
 };
 function addRole() {
      //get depart function then ([rows]) let departs = rows const departOpts = rows.map
-    return inquirer.prompt(rolePrompts)
-    //post to add input to db
-    //console.log success
-    //run init
+     db.getAllDepartments()
+     .then(([rows]) => {
+        let departments = rows;
+        const departOpts = departments.map(({id, name}) => ({
+            name: name,
+            value: id,
+        }))
+        prompt([{
+            name: 'title',
+            message: 'What is the title of the role you are adding?',
+            type: 'input'
+        },
+        {
+            name: 'salary',
+            message: 'What is the salary for the role you are adding?',
+            type: 'input'
+        },
+        {
+            name: 'department_id',
+            message: 'What department is this role under?',
+            type: 'list',
+            choices: departOpts
+        }])
+        .then((data) => {
+            db.addNewRole(data)
+            .then(()=> console.log('Added new Role'))
+            .then(()=> init())
+        })
+    })
+   
 };
 //get request related code
 function getDepartments() {
-    db.getDepartments
-    //then run init
+    db.getAllDepartments()
+    .then(([rows]) => {
+        let departments = rows;
+        console.log('\n');
+        console.table(departments);
+    })
+    .then(() => init());
 };
 function getRoles() {
-    //return roles get request
-    //then run init
+    db.getAllRoles()
+    .then(([rows]) => {
+        let roles = rows;
+        console.log('\n');
+        console.table(roles);
+    })
+    .then(() => init());
 };
 function getEmployees() {
-    //return employee get request
-    //then run init
+    db.getAllEmployees()
+    .then(([rows]) => {
+        let employees = rows;
+        console.log('\n');
+        console.table(employees);
+    })
+    .then(() => init());
 };
 //put/update related code
 function updateRole() {
@@ -84,7 +141,7 @@ function updateRole() {
     //run init
 };
 function init() {
-    inquirer.prompt([{
+    prompt([{
         name: 'open',
         message: 'Welcome to the Company database. What would you like to do?',
         type: 'list',
