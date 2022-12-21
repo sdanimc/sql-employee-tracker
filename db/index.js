@@ -5,12 +5,12 @@ class Database {
     }
     getAllEmployees(){
         return this.db.promise().query(
-            'SELECT employees.id, employees.first, employees.last, roles.title, departments.name, roles.salary, CONCAT(manager.first, " ", manager.last) AS manager FROM employees LEFT JOIN roles ON employees.role_id = roles.id LEFT JOIN departments ON role.department_id = department.id LEFT JOIN employees manager ON manager.id = employee.manager_id;'
+            'SELECT employees.id, employees.first, employees.last, roles.title, departments.name, roles.salary, CONCAT(manager.first, " ", manager.last) AS manager FROM employees LEFT JOIN roles ON employees.role_id = roles.id LEFT JOIN departments ON roles.department_id = departments.id LEFT JOIN employees manager ON manager.id = employees.manager_id;'
         )
     }
     getAllDepartments(){
         return this.db.promise().query(
-            'SELECT departments.id, departments.name FROM department;'
+            'SELECT departments.id, departments.name FROM departments;'
         )
     }
     getAllRoles(){
