@@ -1,7 +1,5 @@
 const inquirer = require('inquirer');
-const db = require('./db');
-
-init();
+//const db = require('./db');
 
 //post request related code
 const rolePrompts = [
@@ -15,12 +13,12 @@ const rolePrompts = [
         message: 'What is the salary for the role you are adding?',
         type: 'input'
     },
-    {
+    /*{
         name: 'department',
         message: 'What department is this role under?',
         type: 'list',
         choices: departOpts
-    }
+    }*/
 ]
 const employeePrompts = [
     {
@@ -33,13 +31,13 @@ const employeePrompts = [
         message: 'Last Name:',
         type: 'input'
     },
-    {
+    /*{
         name: 'role',
         message: 'What role does this employee hold?',
         type: 'list',
         //get rolesOpts in addEmployee funct
         choices: rolesOpts
-    }
+    }*/
 ]
 function addDepartment() {
     return inquirer.prompt([{
@@ -53,7 +51,8 @@ function addDepartment() {
 };
 function addEmployee() {
     //get roles function then ([rows]) let roles = rows const rolesOpts = rows.map
-    return inquirer.prompt(employeePrompts)
+    inquirer.prompt(employeePrompts)
+    .then((answers) => {console.log(answers)})
     //post to add input to db
     //console.log success
     //run init
@@ -85,21 +84,23 @@ function updateRole() {
     //run init
 };
 function init() {
-    return inquirer.prompt([{
-        name: "open",
-        message: "Welcome to the Company database. What would you like to do?",
+    inquirer.prompt([{
+        name: 'open',
+        message: 'Welcome to the Company database. What would you like to do?',
         type: 'list',
         choices: ['View all departments', 'View all roles', 'View all employees', 'Add Department', 'Add Role', 'Add Employee', 'Update Employee Role']
         //choices: [ 'Add Department', 'Add Role', 'Add Employee']
     }])
         .then((data) => {
             let userChoice = data.open;
-            if (userChoice == 'View all departments') { getDepartments(); }
+            if(userChoice == 'Add Employee') { addEmployee();} else { console.log('test complete')}
+            /*if (userChoice == 'View all departments') { getDepartments(); }
             else if (userChoice == 'View all roles') { getRoles(); }
             else if (userChoice == 'View all employees') { getEmployees(); }
             else if (userChoice == 'Add Department') { addDepartment(); }
             else if (userChoice == 'Add Role') { addRole(); }
             else if (userChoice == 'Add Employee') { addEmployee(); }
-            else if (userChoice == 'Update Employee Role') { updateRole(); }
+            else if (userChoice == 'Update Employee Role') { updateRole(); }*/
         })
 }
+init();
