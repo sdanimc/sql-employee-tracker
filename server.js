@@ -1,6 +1,6 @@
 //const inquirer = require('inquirer');
 const { prompt } = require('inquirer');
-const db = require('./db');
+//const db = require('./db');
 
 //post request related code
 function addDepartment() {
